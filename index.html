@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venkata Jaya Pavan Naru · Cybersecurity Engineer</title>
+  <meta name="description" content="Cybersecurity Engineer specializing in SIEM engineering, threat detection, cloud security, and incident response across Azure and AWS." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#080d12;--bg2:#0d1520;--bg3:#111c2a;
+      --green:#00ff88;--green2:#00cc6a;--green3:#004d28;
+      --cyan:#00d4ff;--cyan2:#0099bb;
+      --text:#c8d8e8;--text2:#7a9ab8;--text3:#3a5068;
+      --border:#1a2d40;--border2:#0f4d35;
+      --mono:'Share Tech Mono',monospace;
+      --head:'Rajdhani',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:var(--head);overflow-x:hidden}
+    canvas#grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.18;pointer-events:none}
+    .wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 24px 80px}
+
+    nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0 16px;border-bottom:1px solid var(--border);margin-bottom:48px}
+    .nav-logo{font-family:var(--mono);color:var(--green);font-size:14px;letter-spacing:2px}
+    .nav-logo span{color:var(--text2)}
+    .nav-links{display:flex;gap:24px;flex-wrap:wrap}
+    .nav-links a{font-family:var(--mono);font-size:12px;color:var(--text2);text-decoration:none;letter-spacing:1px;transition:color .2s}
+    .nav-links a:hover{color:var(--green)}
+
+    .hero{padding:60px 0 56px;border-bottom:1px solid var(--border)}
+    .hero-tag{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:3px;margin-bottom:16px}
+    .hero-tag::before{content:'> ';color:var(--text3)}
+    h1{font-size:52px;font-weight:700;line-height:1.05;letter-spacing:-1px;margin-bottom:8px;color:#eaf4ff}
+    h1 .dim{color:var(--text2);font-weight:400}
+    .hero-title{font-family:var(--mono);font-size:16px;color:var(--cyan);margin-bottom:20px;letter-spacing:1px}
+    .hero-title::before{content:'// ';color:var(--text3)}
+    .hero-bio{font-size:16px;color:var(--text2);line-height:1.7;max-width:600px;margin-bottom:32px}
+    .hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+    .badge{font-family:var(--mono);font-size:11px;padding:5px 12px;border:1px solid var(--border2);background:rgba(0,255,136,.04);color:var(--green2);border-radius:3px;letter-spacing:.5px}
+    .hero-links{display:flex;gap:16px;flex-wrap:wrap}
+    .btn{font-family:var(--mono);font-size:12px;padding:10px 22px;border:1px solid var(--green);color:var(--green);background:transparent;border-radius:3px;cursor:pointer;letter-spacing:1px;text-decoration:none;transition:all .2s}
+    .btn:hover{background:var(--green);color:#000}
+    .btn.secondary{border-color:var(--text3);color:var(--text2)}
+    .btn.secondary:hover{border-color:var(--cyan);color:var(--cyan);background:transparent}
+    .stat-row{display:flex;gap:40px;margin-top:28px;flex-wrap:wrap}
+    .stat-num{font-family:var(--mono);font-size:28px;font-weight:400;color:var(--green);line-height:1}
+    .stat-label{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:4px;letter-spacing:1px}
+
+    section{padding:52px 0;border-bottom:1px solid var(--border)}
+    .sec-header{display:flex;align-items:center;gap:16px;margin-bottom:36px}
+    .sec-num{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:2px}
+    h2{font-size:26px;font-weight:700;letter-spacing:.5px;color:#eaf4ff}
+    .sec-line{flex:1;height:1px;background:linear-gradient(to right,var(--border2),transparent)}
+
+    .exp-item{display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:36px;padding:24px;background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:4px;transition:border-color .2s}
+    .exp-item:hover{border-left-color:var(--cyan);border-color:var(--border2)}
+    .exp-role{font-size:18px;font-weight:600;color:#eaf4ff;margin-bottom:4px}
+    .exp-co{font-family:var(--mono);font-size:13px;color:var(--cyan);margin-bottom:12px}
+    .exp-date{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right;white-space:nowrap;padding-top:4px}
+    .exp-bullets{list-style:none;padding:0}
+    .exp-bullets li{font-size:14px;color:var(--text2);line-height:1.65;padding:4px 0 4px 16px;position:relative}
+    .exp-bullets li::before{content:'▸';position:absolute;left:0;color:var(--green);font-size:10px;top:6px}
+
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+    .skill-cat{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:20px}
+    .skill-cat-title{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .skill-tag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--text2);background:rgba(0,212,255,.05);border:1px solid var(--border);padding:3px 8px;margin:3px 3px 0 0;border-radius:2px;transition:all .15s}
+    .skill-tag:hover{color:var(--cyan);border-color:var(--cyan2)}
+
+    .certs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+    .cert-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:20px 22px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+    .cert-card:hover{border-color:var(--green2)}
+    .cert-icon{width:40px;height:40px;border-radius:4px;background:rgba(0,255,136,.08);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.5px;text-align:center;line-height:1.3}
+    .cert-name{font-size:14px;font-weight:600;color:#eaf4ff;margin-bottom:4px}
+    .cert-issuer{font-family:var(--mono);font-size:11px;color:var(--text3)}
+
+    .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .proj-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:22px;transition:border-color .2s;cursor:default}
+    .proj-card:hover{border-color:var(--cyan2)}
+    .proj-tag{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:10px}
+    .proj-name{font-size:16px;font-weight:600;color:#eaf4ff;margin-bottom:8px}
+    .proj-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+    .proj-stack{display:flex;flex-wrap:wrap;gap:6px}
+    .proj-stack span{font-family:var(--mono);font-size:10px;color:var(--cyan2);background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);padding:2px 7px;border-radius:2px}
+
+    .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .contact-item{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:16px 18px;transition:border-color .2s}
+    .contact-item:hover{border-color:var(--green2)}
+    .contact-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:6px}
+    .contact-val{font-size:14px;color:var(--green);font-family:var(--mono)}
+
+    footer{padding:32px 0 0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1px}
+    .cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:4px}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+    @media(max-width:600px){
+      h1{font-size:36px}
+      .exp-item{grid-template-columns:1fr}
+      .exp-date{text-align:left}
+      nav{flex-direction:column;gap:12px;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="grid"></canvas>
+
+<div class="wrap">
+  <nav>
+    <div class="nav-logo"><span>~/</span>jpnaru</div>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#experience">exp</a>
+      <a href="#skills">skills</a>
+      <a href="#certs">certs</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </div>
+  </nav>
+
+  <div class="hero" id="about">
+    <div class="hero-tag">cybersecurity engineer</div>
+    <h1>Venkata Jaya<br><span class="dim">Pavan Naru</span></h1>
+    <div class="hero-title">securing systems. detecting threats. automating response.</div>
+    <p class="hero-bio">Cloud Security Engineer with 4+ years protecting large-scale enterprise infrastructure. Specializing in SIEM engineering, threat detection, cloud security architecture, and incident response across Azure and AWS environments.</p>
+    <div class="hero-badges">
+      <span class="badge">Microsoft Sentinel</span>
+      <span class="badge">CrowdStrike</span>
+      <span class="badge">AWS</span>
+      <span class="badge">Azure</span>
+      <span class="badge">Python</span>
+      <span class="badge">MITRE ATT&amp;CK</span>
+      <span class="badge">Zero Trust</span>
+      <span class="badge">ISO 27001</span>
+    </div>
+    <div class="hero-links">
+      <a class="btn" href="mailto:jayapavannaru@gmail.com">contact me</a>
+      <a class="btn secondary" href="https://linkedin.com/in/jpnaru" target="_blank" rel="noopener">linkedin ↗</a>
+      <a class="btn secondary" href="https://github.com/jp2048" target="_blank" rel="noopener">github ↗</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">4+</div><div class="stat-label">years experience</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">vulns managed to SLA</div></div>
+      <div class="stat"><div class="stat-num">20%</div><div class="stat-label">MTTD improvement</div></div>
+      <div class="stat"><div class="stat-num">3.7</div><div class="stat-label">GPA — NJIT MS</div></div>
+    </div>
+  </div>
+
+  <section id="experience">
+    <div class="sec-header">
+      <span class="sec-num">01.</span>
+      <h2>Experience</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-role">Cybersecurity Engineer</div>
+        <div class="exp-co">Nationwide Insurance</div>
+        <ul class="exp-bullets">
+          <li>Engineered and tuned 20+ detection rules in Microsoft Sentinel and Splunk ES, reducing alert fatigue by 30% and improving MTTD by 20%</li>
+          <li>Led cloud incident response as escalation point — triage, containment, post-incident improvements, reducing MTTR by 18%</li>
+          <li>Managed 500+ vulnerabilities across quarterly cycles to SLA using Qualys and Tenable Nessus</li>
+          <li>Designed Azure IAM controls — Conditional Access, MFA, RBAC, Key Vault — reducing unauthorized access risk by 20%</li>
+          <li>Automated security workflows with Python and PowerShell, cutting manual remediation effort by 35%</li>
+        </ul>
+      </div>
+      <div class="exp-date">Jul 2024 – Present<br><span style="color:var(--green);font-size:10px">▸ current</span></div>
+    </div>
+    <div class="exp-item">
+      <div>
+        <div class="exp-role">Cybersecurity Engineer</div>
+        <div class="exp-co">IBM — India</div>
+        <ul class="exp-bullets">
+          <li>Delivered cloud security engineering for enterprise clients across Azure and AWS — SOC monitoring, vulnerability management, SDLC security integration</li>
+          <li>Partnered with application teams to remediate OWASP Top 10 vulnerabilities and strengthen cloud security controls during migrations</li>
+          <li>Implemented SIEM monitoring pipelines and compliance controls aligned to ISO 27001 and NIST CSF</li>
+        </ul>
+      </div>
+      <div class="exp-date">Jun 2020 – Jul 2022</div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-header">
+      <span class="sec-num">02.</span>
+      <h2>Skills</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-cat">
+        <div class="skill-cat-title">SIEM / Detection</div>
+        <span class="skill-tag">Microsoft Sentinel</span>
+        <span class="skill-tag">Splunk ES</span>
+        <span class="skill-tag">IBM QRadar</span>
+        <span class="skill-tag">KQL</span>
+        <span class="skill-tag">SPL</span>
+        <span class="skill-tag">Azure Monitor</span>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-title">Cloud Security</div>
+        <span class="skill-tag">Azure</span>
+        <span class="skill-tag">AWS</span>
+        <span class="skill-tag">GuardDuty</span>
+        <span class="skill-tag">Security Hub</span>
+        <span class="skill-tag">Defender for Cloud</span>
+        <span class="skill-tag">GCP</span>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-title">Endpoint / EDR</div>
+        <span class="skill-tag">CrowdStrike Falcon</span>
+        <span class="skill-tag">MS Defender XDR</span>
+        <span class="skill-tag">Palo Alto</span>
+        <span class="skill-tag">Cisco Firepower</span>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-title">IAM</div>
+        <span class="skill-tag">Azure AD</span>
+        <span class="skill-tag">AWS IAM</span>
+        <span class="skill-tag">Okta</span>
+        <span class="skill-tag">SAML/OIDC</span>
+        <span class="skill-tag">MFA</span>
+        <span class="skill-tag">Conditional Access</span>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-title">Automation</div>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">PowerShell</span>
+        <span class="skill-tag">Bash</span>
+        <span class="skill-tag">REST APIs</span>
+        <span class="skill-tag">SOAR</span>
+        <span class="skill-tag">SQL</span>
+      </div>
+      <div class="skill-cat">
+        <div class="skill-cat-title">Frameworks</div>
+        <span class="skill-tag">MITRE ATT&amp;CK</span>
+        <span class="skill-tag">NIST CSF</span>
+        <span class="skill-tag">ISO 27001</span>
+        <span class="skill-tag">Zero Trust</span>
+        <span class="skill-tag">SOC 2</span>
+        <span class="skill-tag">HIPAA</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="certs">
+    <div class="sec-header">
+      <span class="sec-num">03.</span>
+      <h2>Certifications</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-icon">SEC+</div>
+        <div>
+          <div class="cert-name">CompTIA Security+</div>
+          <div class="cert-issuer">CompTIA</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">AZ<br>500</div>
+        <div>
+          <div class="cert-name">Azure Security Engineer Associate</div>
+          <div class="cert-issuer">Microsoft — AZ-500</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">MS<br>CS</div>
+        <div>
+          <div class="cert-name">MS Cybersecurity &amp; Privacy</div>
+          <div class="cert-issuer">NJIT — GPA 3.7 · May 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="sec-header">
+      <span class="sec-num">04.</span>
+      <h2>Projects</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-tag">DETECTION ENGINEERING</div>
+        <div class="proj-name">Sentinel Detection Pipeline</div>
+        <div class="proj-desc">Built 20+ custom KQL detection rules in Microsoft Sentinel with automated alerting and SOAR playbook integration, reducing MTTD by 20%.</div>
+        <div class="proj-stack"><span>KQL</span><span>Sentinel</span><span>SOAR</span><span>Azure Monitor</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-tag">CLOUD SECURITY</div>
+        <div class="proj-name">Cloud IAM Hardening</div>
+        <div class="proj-desc">Designed and implemented Azure Conditional Access policies, MFA enforcement, RBAC redesign, and Key Vault-based certificate governance, reducing unauthorized access risk by 20%.</div>
+        <div class="proj-stack"><span>Azure AD</span><span>Key Vault</span><span>PowerShell</span><span>RBAC</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-tag">AUTOMATION</div>
+        <div class="proj-name">Vulnerability Automation</div>
+        <div class="proj-desc">Developed Python and PowerShell scripts to automate vulnerability triage and patch tracking workflows, cutting manual remediation effort by 35% across 500+ quarterly findings.</div>
+        <div class="proj-stack"><span>Python</span><span>PowerShell</span><span>Qualys</span><span>Nessus</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-tag">THREAT INTELLIGENCE</div>
+        <div class="proj-name">MITRE ATT&amp;CK Mapping</div>
+        <div class="proj-desc">Mapped existing detection coverage to MITRE ATT&amp;CK framework, identifying gaps and prioritizing new detection rule development, contributing to 15% improvement in early threat detection.</div>
+        <div class="proj-stack"><span>MITRE ATT&amp;CK</span><span>Splunk</span><span>Sentinel</span><span>CrowdStrike</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="sec-header">
+      <span class="sec-num">05.</span>
+      <h2>Contact</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item"><div class="contact-label">EMAIL</div><div class="contact-val">jayapavannaru@gmail.com</div></div>
+      <div class="contact-item"><div class="contact-label">PHONE</div><div class="contact-val">862-286-0552</div></div>
+      <div class="contact-item"><div class="contact-label">LOCATION</div><div class="contact-val">Jersey City, NJ</div></div>
+      <div class="contact-item"><div class="contact-label">LINKEDIN</div><div class="contact-val">linkedin.com/in/jpnaru</div></div>
+      <div class="contact-item"><div class="contact-label">GITHUB</div><div class="contact-val">github.com/jp2048</div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span style="color:var(--text3)">$ </span>venkata_jaya_pavan_naru --portfolio 2026<div class="cursor"></div>
+  </footer>
+</div>
+
+<script>
+  const canvas = document.getElementById('grid');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const chars = '01ABCDEF'.split('');
+  const cols = Math.ceil(canvas.width / 28);
+  const rows = Math.ceil(canvas.height / 28);
+  const grid = [];
+  for (let i = 0; i < cols * rows; i++) {
+    grid.push({ c: chars[Math.floor(Math.random() * chars.length)], alpha: Math.random() * .6 + .1, speed: Math.random() * .02 + .005 });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '11px Share Tech Mono';
+    grid.forEach((g, i) => {
+      const x = (i % cols) * 28, y = Math.floor(i / cols) * 28;
+      g.alpha += g.speed * (Math.random() > .5 ? 1 : -1);
+      g.alpha = Math.max(.05, Math.min(.5, g.alpha));
+      if (Math.random() < .002) g.c = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillStyle = `rgba(0,255,136,${g.alpha})`;
+      ctx.fillText(g.c, x, y);
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
