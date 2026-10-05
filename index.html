@@ -1,0 +1,1687 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Venkata Jaya Pavan Naru's cybersecurity portfolio: detection engineering, threat hunting, vulnerability management, cloud security, and incident response." />
+    <link rel="icon" href="data:," />
+    <title>Venkata Jaya Pavan Naru — Cybersecurity Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Newsreader:opsz,wght@6..72,500;6..72,600&amp;display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #eef5f9;
+        --surface: #ffffff;
+        --surface-2: #e4eef4;
+        --ink: #071b29;
+        --muted: #496170;
+        --line: #b8cbd6;
+        --line-strong: #7896a8;
+        --blue: #006b94;
+        --blue-strong: #004d70;
+        --cyan: #008aa1;
+        --accent-soft: #d5edf3;
+        --critical: #b8393f;
+        --shadow: 0 24px 65px rgba(13, 53, 74, 0.12);
+        --grid: rgba(0, 77, 112, 0.07);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #06131c;
+          --surface: #0b1d28;
+          --surface-2: #102733;
+          --ink: #e7f7ff;
+          --muted: #9fb8c5;
+          --line: #234453;
+          --line-strong: #3a687a;
+          --blue: #43b9e9;
+          --blue-strong: #8ddcff;
+          --cyan: #55d7df;
+          --accent-soft: #113845;
+          --critical: #ff7d84;
+          --shadow: 0 26px 70px rgba(0, 0, 0, 0.35);
+          --grid: rgba(85, 215, 223, 0.055);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-width: 0;
+        overflow-x: hidden;
+        isolation: isolate;
+        background-color: var(--bg);
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 32px 32px;
+        color: var(--ink);
+        font-family: "Manrope", sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+      body::before {
+        inset: -12%;
+        background:
+          radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--cyan) 12%, transparent) 0, transparent 30%),
+          radial-gradient(circle at 88% 36%, color-mix(in srgb, var(--blue) 10%, transparent) 0, transparent 28%),
+          radial-gradient(circle at 38% 92%, color-mix(in srgb, var(--cyan) 7%, transparent) 0, transparent 27%);
+        filter: blur(18px);
+        animation: ambient-drift 20s ease-in-out infinite alternate;
+      }
+      body::after {
+        background:
+          linear-gradient(180deg, transparent 0 52%, color-mix(in srgb, var(--cyan) 5%, transparent) 52.1%, transparent 52.35%),
+          radial-gradient(ellipse at center, transparent 55%, color-mix(in srgb, var(--bg) 62%, transparent) 100%);
+        background-size: 100% 190px, 100% 100%;
+        opacity: 0.65;
+        animation: scan-field 14s linear infinite;
+      }
+      .nav-shell, main, footer { position: relative; z-index: 1; }
+
+      @keyframes ambient-drift {
+        from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+        to { transform: translate3d(2%, 1.5%, 0) scale(1.04); }
+      }
+      @keyframes scan-field {
+        from { background-position: 0 -190px, center; }
+        to { background-position: 0 calc(100vh + 190px), center; }
+      }
+      @keyframes radar-turn { to { transform: rotate(1turn); } }
+      @keyframes signal-pulse {
+        0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--cyan) 12%, transparent); }
+        50% { box-shadow: 0 0 0 9px color-mix(in srgb, var(--cyan) 3%, transparent); }
+      }
+      @keyframes detection-mark {
+        0%, 10% { transform: scaleX(0); opacity: 0; }
+        18%, 72% { transform: scaleX(1); opacity: 1; }
+        82%, 100% { transform: scaleX(1); opacity: 0; }
+      }
+      @keyframes detection-scan {
+        0%, 10% { left: 0; opacity: 0; }
+        14% { opacity: 1; }
+        23% { left: 100%; opacity: 1; }
+        27%, 100% { left: 100%; opacity: 0; }
+      }
+
+      a { color: inherit; }
+      button, a { -webkit-tap-highlight-color: transparent; }
+      .mono { font-family: "IBM Plex Mono", monospace; }
+
+      .nav-shell {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--bg) 90%, transparent);
+        backdrop-filter: blur(14px);
+      }
+
+      .nav {
+        width: min(1180px, calc(100% - 40px));
+        min-height: 58px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .nav-context {
+        color: var(--blue-strong);
+        font-size: 0.76rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+      }
+
+      .nav-links { display: flex; align-items: center; gap: 22px; }
+      .nav-links a {
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .nav-links a:hover, .nav-links a:focus-visible { color: var(--blue-strong); }
+      :focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
+
+      main { overflow: clip; }
+      .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+      .hero {
+        min-height: min(760px, calc(100svh - 58px));
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(310px, 0.7fr);
+        align-items: center;
+        gap: clamp(50px, 8vw, 110px);
+        padding: clamp(72px, 10vw, 126px) 0 84px;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+        color: var(--blue-strong);
+        font: 600 0.8rem/1.3 "IBM Plex Mono", monospace;
+      }
+      .identity::before {
+        content: "";
+        width: 34px;
+        height: 2px;
+        background: var(--cyan);
+        box-shadow: 8px -6px 0 -0.5px var(--cyan);
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        font-size: clamp(3rem, 7.4vw, 6.8rem);
+        line-height: 0.95;
+        letter-spacing: -0.065em;
+        font-weight: 800;
+      }
+      h1 span { color: var(--blue); }
+      .detection-word {
+        position: relative;
+        display: inline-block;
+        isolation: isolate;
+      }
+      .detection-word::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0.08em -0.04em 0.02em;
+        background: color-mix(in srgb, var(--cyan) 17%, transparent);
+        transform: scaleX(0);
+        transform-origin: left center;
+        animation: detection-mark 5.8s cubic-bezier(0.65, 0, 0.2, 1) 0.8s infinite;
+      }
+      .detection-word::after {
+        content: "";
+        position: absolute;
+        top: 0.02em;
+        bottom: 0.02em;
+        left: 0;
+        width: 3px;
+        background: var(--cyan);
+        box-shadow: 0 0 15px color-mix(in srgb, var(--cyan) 70%, transparent);
+        opacity: 0;
+        animation: detection-scan 5.8s cubic-bezier(0.65, 0, 0.2, 1) 0.8s infinite;
+      }
+
+      .hero-copy {
+        max-width: 680px;
+        margin: 30px 0 0;
+        color: var(--muted);
+        font-size: clamp(1.06rem, 1.6vw, 1.25rem);
+      }
+      .hero-copy strong { color: var(--ink); font-weight: 700; }
+
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+      .button {
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 11px 18px;
+        border: 1px solid var(--blue-strong);
+        color: var(--surface);
+        background: var(--blue-strong);
+        font-size: 0.88rem;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        .button { color: #06131c; }
+      }
+      .button.secondary { background: transparent; color: var(--blue-strong); border-color: var(--line-strong); }
+      .button:hover { filter: brightness(1.08); }
+      .button svg { width: 17px; height: 17px; }
+
+      .radar-panel {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        padding: 28px;
+        border: 1px solid var(--line-strong);
+        background: color-mix(in srgb, var(--surface) 94%, transparent);
+        box-shadow: var(--shadow);
+      }
+      .radar-panel > *:not(.radar-sweep) { position: relative; z-index: 2; }
+      .radar-sweep {
+        position: absolute;
+        z-index: 1;
+        width: 360px;
+        aspect-ratio: 1;
+        right: -150px;
+        top: -122px;
+        border-radius: 50%;
+        opacity: 0.22;
+        background:
+          repeating-radial-gradient(circle, transparent 0 36px, color-mix(in srgb, var(--cyan) 22%, transparent) 37px 38px),
+          conic-gradient(from 8deg, transparent 0 73%, color-mix(in srgb, var(--cyan) 45%, transparent) 86%, transparent 87% 100%);
+        animation: radar-turn 11s linear infinite;
+      }
+      .radar-sweep::after {
+        content: "";
+        position: absolute;
+        inset: 50% auto auto 50%;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 16px var(--cyan);
+        transform: translate(-50%, -50%);
+      }
+      .radar-panel::before,
+      .radar-panel::after {
+        content: "";
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        border-color: var(--cyan);
+      }
+      .radar-panel::before { top: -1px; left: -1px; border-top: 3px solid; border-left: 3px solid; }
+      .radar-panel::after { right: -1px; bottom: -1px; border-right: 3px solid; border-bottom: 3px solid; }
+      .radar-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 24px; }
+      .radar-head h2 { margin: 0; font-size: 0.82rem; letter-spacing: 0.07em; }
+      .signal {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--cyan);
+        font: 600 0.7rem/1 "IBM Plex Mono", monospace;
+      }
+      .signal::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cyan);
+        animation: signal-pulse 2.8s ease-in-out infinite;
+      }
+      .focus-list { list-style: none; margin: 0; padding: 0; }
+      .focus-list li {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 12px;
+        align-items: start;
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+      }
+      .focus-list li:last-child { padding-bottom: 0; }
+      .focus-number { color: var(--cyan); font: 500 0.72rem/1.7 "IBM Plex Mono", monospace; }
+      .focus-list strong { display: block; font-size: 0.9rem; line-height: 1.35; }
+      .focus-list small { display: block; margin-top: 3px; color: var(--muted); font-size: 0.76rem; }
+      .availability {
+        margin-top: 24px;
+        padding-top: 18px;
+        border-top: 1px dashed var(--line-strong);
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .availability b { color: var(--ink); }
+
+      .section { padding: clamp(80px, 10vw, 130px) 0; border-top: 1px solid var(--line); }
+      .section-head {
+        display: grid;
+        grid-template-columns: 160px minmax(0, 1fr);
+        gap: 30px;
+        align-items: start;
+        margin-bottom: 54px;
+      }
+      .section-index { color: var(--blue-strong); font: 600 0.75rem/1.4 "IBM Plex Mono", monospace; }
+      .section-title { margin: 0; font-size: clamp(2rem, 4vw, 3.7rem); line-height: 1.04; letter-spacing: -0.045em; }
+      .section-intro { max-width: 650px; margin: 17px 0 0; color: var(--muted); }
+
+      .project-stack { display: grid; gap: 16px; }
+      .project {
+        position: relative;
+        display: grid;
+        grid-template-columns: 82px minmax(0, 1.2fr) minmax(220px, 0.8fr) 42px;
+        gap: 24px;
+        align-items: center;
+        padding: 28px 28px 28px 18px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        text-decoration: none;
+        transition: border-color 160ms ease, background 160ms ease;
+      }
+      .project:hover, .project:focus-visible { border-color: var(--cyan); background: var(--accent-soft); }
+      .project-rank { color: var(--blue); font: 600 1.6rem/1 "IBM Plex Mono", monospace; text-align: center; }
+      .project-main h3 { margin: 0; font-size: clamp(1.08rem, 2vw, 1.35rem); line-height: 1.25; }
+      .project-main p { margin: 9px 0 0; color: var(--muted); font-size: 0.92rem; }
+      .project-meta { display: flex; flex-wrap: wrap; gap: 7px; }
+      .tag { padding: 5px 8px; border: 1px solid var(--line); color: var(--muted); font: 500 0.67rem/1.2 "IBM Plex Mono", monospace; }
+      .project-arrow { color: var(--blue-strong); font-size: 1.45rem; text-align: right; transition: transform 160ms ease; }
+      .project:hover .project-arrow { transform: translateX(4px); }
+
+      .experience-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(270px, 0.55fr); gap: clamp(44px, 8vw, 92px); }
+      .timeline { position: relative; }
+      .timeline::before { content: ""; position: absolute; left: 6px; top: 7px; bottom: 10px; width: 1px; background: var(--line-strong); }
+      .role { position: relative; padding: 0 0 42px 38px; }
+      .role:last-child { padding-bottom: 0; }
+      .role::before {
+        content: "";
+        position: absolute;
+        left: 1px;
+        top: 6px;
+        width: 11px;
+        height: 11px;
+        background: var(--bg);
+        border: 2px solid var(--cyan);
+        transform: rotate(45deg);
+      }
+      .role-top { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; }
+      .role h3 { margin: 0; font-size: 1.08rem; line-height: 1.35; }
+      .role-date { flex: 0 0 auto; color: var(--blue-strong); font: 600 0.72rem/1.4 "IBM Plex Mono", monospace; }
+      .role-company { margin: 4px 0 0; color: var(--muted); font-size: 0.88rem; }
+      .role p:last-child { margin: 11px 0 0; color: var(--muted); font-size: 0.9rem; }
+      .side-sheet { align-self: start; border-top: 3px solid var(--blue); background: var(--surface); padding: 25px; }
+      .side-sheet h3 { margin: 0 0 20px; font-size: 0.78rem; letter-spacing: 0.04em; }
+      .skill-group { padding: 16px 0; border-top: 1px solid var(--line); }
+      .skill-group:first-of-type { border-top: 0; padding-top: 0; }
+      .skill-group span { display: block; color: var(--blue-strong); font: 600 0.67rem/1.4 "IBM Plex Mono", monospace; }
+      .skill-group p { margin: 6px 0 0; color: var(--muted); font-size: 0.82rem; line-height: 1.6; }
+
+      .education-band {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 36px;
+        padding: clamp(34px, 6vw, 58px);
+        color: #eaf9ff;
+        background: #08324a;
+      }
+      .education-band .mono { color: #72d9ed; font-size: 0.72rem; }
+      .education-band h2 { margin: 12px 0 0; max-width: 800px; font-size: clamp(1.8rem, 4vw, 3.4rem); line-height: 1.08; letter-spacing: -0.04em; }
+      .education-band p { margin: 15px 0 0; color: #b8d7e5; }
+      .degree-meta { min-width: 130px; text-align: right; }
+      .degree-meta strong { display: block; font-size: 1.4rem; }
+      .degree-meta span { color: #b8d7e5; font-size: 0.78rem; }
+
+      footer {
+        padding: 34px 0 max(34px, env(safe-area-inset-bottom));
+        border-top: 1px solid var(--line);
+      }
+      .footer-inner { display: flex; justify-content: space-between; gap: 24px; align-items: center; color: var(--muted); font-size: 0.78rem; }
+      .footer-inner a { color: var(--blue-strong); font-weight: 800; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+
+      @media (max-width: 850px) {
+        .hero { grid-template-columns: 1fr; min-height: 0; gap: 52px; }
+        .radar-panel { max-width: 540px; }
+        .project { grid-template-columns: 54px 1fr 38px; }
+        .project-meta { grid-column: 2 / 3; }
+        .experience-layout { grid-template-columns: 1fr; }
+        .side-sheet { max-width: 560px; }
+      }
+
+      @media (max-width: 620px) {
+        .nav { width: min(100% - 28px, 1180px); min-height: 54px; }
+        .nav-context { display: none; }
+        .nav-links { width: 100%; justify-content: space-between; gap: 12px; }
+        .nav-links a { font-size: 0.76rem; }
+        .container { width: min(100% - 28px, 1180px); }
+        .hero { padding: 62px 0 66px; }
+        h1 { font-size: clamp(3rem, 16vw, 4.4rem); }
+        .hero-copy { margin-top: 24px; }
+        .hero-actions { display: grid; grid-template-columns: 1fr; }
+        .radar-panel { padding: 22px 20px; }
+        .section { padding: 74px 0; }
+        .section-head { grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
+        .project { grid-template-columns: 38px minmax(0, 1fr) 24px; gap: 13px; padding: 22px 15px 22px 10px; }
+        .project-rank { font-size: 1.05rem; }
+        .project-main p { font-size: 0.85rem; }
+        .project-meta { grid-column: 2 / 4; }
+        .project-arrow { font-size: 1.1rem; }
+        .role { padding-left: 31px; }
+        .role-top { display: block; }
+        .role-date { display: block; margin-top: 6px; }
+        .education-band { grid-template-columns: 1fr; padding: 32px 24px; }
+        .degree-meta { text-align: left; }
+        .footer-inner { align-items: flex-start; flex-direction: column; }
+      }
+
+      /* Design 3 — clean editorial with a single signal-red accent */
+      :root {
+        --bg: #f6f5f1;
+        --surface: #fcfbf8;
+        --surface-2: #ebe9e3;
+        --ink: #171614;
+        --muted: #625f59;
+        --line: #d8d4cc;
+        --line-strong: #8f8a81;
+        --blue: #c6292f;
+        --blue-strong: #a9161d;
+        --cyan: #c6292f;
+        --accent-soft: #f3dfdc;
+        --critical: #c6292f;
+        --shadow: 0 22px 58px rgba(40, 31, 25, 0.09);
+        --grid: transparent;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #171614;
+          --surface: #201f1c;
+          --surface-2: #292722;
+          --ink: #f3f0e9;
+          --muted: #b9b3a9;
+          --line: #3b3832;
+          --line-strong: #777167;
+          --blue: #ff6b64;
+          --blue-strong: #ff817b;
+          --cyan: #ff6b64;
+          --accent-soft: #3a2422;
+          --critical: #ff817b;
+          --shadow: 0 24px 62px rgba(0, 0, 0, 0.3);
+          --grid: transparent;
+        }
+      }
+      @keyframes editorial-in {
+        from { opacity: 0; transform: translateY(0.38em); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes red-wipe {
+        0%, 8% { transform: scaleX(0); transform-origin: left; }
+        22%, 74% { transform: scaleX(1); transform-origin: left; }
+        84%, 100% { transform: scaleX(0); transform-origin: right; }
+      }
+      @keyframes sweep-line {
+        0%, 12% { transform: translateX(-120%); opacity: 0; }
+        18% { opacity: 0.65; }
+        42%, 100% { transform: translateX(420%); opacity: 0; }
+      }
+
+      body {
+        background: var(--bg);
+        font-family: "IBM Plex Sans", sans-serif;
+      }
+      body::before, body::after { display: none; }
+      .nav-shell {
+        border-color: var(--line);
+        background: color-mix(in srgb, var(--bg) 93%, transparent);
+        backdrop-filter: blur(12px);
+      }
+      .nav { width: min(1120px, calc(100% - 40px)); min-height: 64px; }
+      .nav-context { color: var(--ink); letter-spacing: 0.08em; }
+      .nav-links { gap: 30px; }
+      .nav-links a { font-weight: 600; }
+      .container { width: min(1120px, calc(100% - 40px)); }
+      .hero {
+        min-height: min(790px, calc(100svh - 64px));
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
+        gap: clamp(54px, 9vw, 120px);
+        padding: clamp(82px, 11vw, 142px) 0 100px;
+      }
+      .identity {
+        margin-bottom: 30px;
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+        letter-spacing: 0.04em;
+        animation: editorial-in 620ms ease-out both;
+      }
+      .identity::before { width: 42px; height: 1px; background: var(--blue); box-shadow: none; }
+      h1 {
+        max-width: 780px;
+        font-family: "Newsreader", Georgia, serif;
+        font-size: clamp(3.6rem, 7.7vw, 7.3rem);
+        line-height: 0.86;
+        letter-spacing: -0.055em;
+        font-weight: 600;
+      }
+      .hero-line { display: block; width: fit-content; color: var(--ink); animation: editorial-in 760ms cubic-bezier(.2,.72,.2,1) both; }
+      .line-one { animation-delay: 80ms; }
+      .line-two { animation-delay: 180ms; color: var(--blue); font-style: italic; }
+      .line-three { animation-delay: 280ms; }
+      .detection-word { z-index: 0; }
+      .detection-word::before {
+        inset: auto -0.05em 0.06em;
+        height: 0.09em;
+        z-index: -1;
+        background: var(--blue);
+        transform-origin: left;
+        animation: red-wipe 5.2s cubic-bezier(.7,0,.22,1) 1.2s infinite;
+      }
+      .detection-word::after { display: none; }
+      .hero-copy {
+        max-width: 635px;
+        margin-top: 34px;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.45vw, 1.16rem);
+        animation: editorial-in 700ms ease-out 360ms both;
+      }
+      .hero-actions { animation: editorial-in 700ms ease-out 440ms both; }
+      .button { border-color: var(--blue); color: #fff; background: var(--blue); }
+      @media (prefers-color-scheme: dark) { .button { color: #171614; } }
+      .button.secondary { color: var(--ink); border-color: var(--line-strong); }
+
+      .radar-panel {
+        padding: 30px 0;
+        border: 0;
+        border-top: 4px solid var(--ink);
+        border-bottom: 1px solid var(--line-strong);
+        background: transparent;
+        box-shadow: none;
+      }
+      .radar-panel::before, .radar-panel::after { display: none; }
+      .radar-sweep {
+        display: block;
+        width: 32%;
+        height: 100%;
+        right: auto;
+        top: 0;
+        border-radius: 0;
+        opacity: 0;
+        background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--blue) 13%, transparent), transparent);
+        animation: sweep-line 5.2s ease-in-out 1.3s infinite;
+      }
+      .radar-sweep::after { display: none; }
+      .radar-head { margin-bottom: 18px; }
+      .radar-head h2 { letter-spacing: 0.11em; }
+      .signal { color: var(--blue); }
+      .signal::before { background: var(--blue); animation: signal-pulse 2.8s ease-in-out infinite; }
+      .focus-list li { grid-template-columns: 25px 1fr; gap: 14px; padding: 15px 0; }
+      .focus-number { color: var(--blue); }
+      .availability { border-top-style: solid; }
+
+      .section { padding: clamp(88px, 11vw, 142px) 0; }
+      .section-head { grid-template-columns: 130px minmax(0, 1fr); margin-bottom: 60px; }
+      .section-index { color: var(--blue); }
+      .section-title {
+        max-width: 780px;
+        font-family: "Newsreader", Georgia, serif;
+        font-size: clamp(2.55rem, 5vw, 4.7rem);
+        font-weight: 600;
+        line-height: 0.98;
+      }
+      .project-stack { gap: 0; border-bottom: 1px solid var(--line); }
+      .project {
+        grid-template-columns: 70px minmax(0, 1.2fr) minmax(220px, 0.8fr) 42px;
+        padding: 30px 8px 30px 0;
+        border: 0;
+        border-top: 1px solid var(--line);
+        background: transparent;
+      }
+      .project:hover, .project:focus-visible { border-color: var(--line); background: var(--accent-soft); }
+      .project-rank { color: var(--blue); font-size: 1.05rem; }
+      .tag { border: 0; border-bottom: 1px solid var(--line-strong); padding-inline: 0; margin-right: 9px; }
+      .project-arrow { color: var(--blue); }
+      .role::before { border-color: var(--blue); background: var(--bg); border-radius: 50%; transform: none; }
+      .role-date, .skill-group span { color: var(--blue); }
+      .side-sheet { border-top: 4px solid var(--ink); background: transparent; padding: 24px 0 0; }
+      .education-band { color: var(--ink); background: var(--surface-2); border-left: 8px solid var(--blue); }
+      .education-band .mono { color: var(--blue); }
+      .education-band p, .degree-meta span { color: var(--muted); }
+
+      @media (max-width: 850px) {
+        .hero { grid-template-columns: 1fr; }
+        .radar-panel { max-width: 600px; }
+      }
+      @media (max-width: 620px) {
+        .nav { width: min(100% - 28px, 1120px); min-height: 58px; }
+        .container { width: min(100% - 28px, 1120px); }
+        .hero { padding-top: 70px; }
+        h1 { font-size: clamp(3.55rem, 17vw, 5rem); line-height: 0.88; }
+        .section-head { grid-template-columns: 1fr; }
+        .project { grid-template-columns: 34px minmax(0, 1fr) 24px; padding: 24px 4px 24px 0; }
+      }
+
+      /* Night Watch — broad defensive security command surface */
+      :root {
+        --bg: #edf1f0;
+        --surface: #fbfcfb;
+        --surface-2: #dde6e3;
+        --ink: #10201f;
+        --muted: #526865;
+        --line: #bdcfca;
+        --line-strong: #76958e;
+        --blue: #147765;
+        --blue-strong: #18564b;
+        --cyan: #079c97;
+        --signal: #c96f2b;
+        --accent-soft: #dcece7;
+        --critical: #b84b44;
+        --shadow: 0 26px 80px rgba(19, 54, 49, 0.14);
+        --grid: rgba(20, 119, 101, 0.07);
+        --grid-bright: rgba(7, 156, 151, 0.15);
+        --panel-glow: rgba(7, 156, 151, 0.09);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #08110f;
+          --surface: #0d1b18;
+          --surface-2: #132722;
+          --ink: #edf8f4;
+          --muted: #9bb6ae;
+          --line: #24433b;
+          --line-strong: #3d7166;
+          --blue: #52c9ad;
+          --blue-strong: #88e0cb;
+          --cyan: #53d8d0;
+          --signal: #f0a05b;
+          --accent-soft: #12372f;
+          --critical: #ff8178;
+          --shadow: 0 28px 90px rgba(0, 0, 0, 0.46);
+          --grid: rgba(83, 216, 208, 0.05);
+          --grid-bright: rgba(83, 216, 208, 0.12);
+          --panel-glow: rgba(83, 216, 208, 0.075);
+        }
+      }
+      @keyframes grid-drift {
+        to { background-position: 44px 44px, 44px 44px; }
+      }
+      @keyframes watch-scan {
+        0% { transform: translateY(-20vh); opacity: 0; }
+        12%, 78% { opacity: 0.8; }
+        100% { transform: translateY(120vh); opacity: 0; }
+      }
+      @keyframes orbit-drift {
+        0% { transform: translate3d(0, -1%, 0) rotate(-8deg); }
+        100% { transform: translate3d(-4%, 3%, 0) rotate(10deg); }
+      }
+      @keyframes hero-lock {
+        from { opacity: 0; transform: translateY(28px); clip-path: inset(0 0 100% 0); }
+        to { opacity: 1; transform: translateY(0); clip-path: inset(0); }
+      }
+      @keyframes title-acquire {
+        0% {
+          opacity: 0;
+          transform: perspective(900px) rotateX(-62deg) translate3d(-0.22em, 0.58em, 0);
+          transform-origin: left bottom;
+          filter: blur(9px);
+          clip-path: inset(0 0 100% 0);
+          text-shadow: 0.08em 0 var(--signal), -0.08em 0 var(--cyan);
+        }
+        58% {
+          opacity: 1;
+          filter: blur(0);
+          clip-path: inset(0);
+          text-shadow: 0.035em 0 var(--signal), -0.035em 0 var(--cyan);
+        }
+        78% {
+          transform: perspective(900px) rotateX(0) translate3d(0, 0, 0);
+          text-shadow: 0.015em 0 var(--signal), -0.015em 0 var(--cyan);
+        }
+        100% {
+          opacity: 1;
+          transform: none;
+          filter: none;
+          clip-path: inset(0);
+          text-shadow: none;
+        }
+      }
+      @keyframes signal-echo {
+        0%, 76%, 100% { opacity: 0; transform: translateX(0); clip-path: inset(0 0 100% 0); }
+        78% { opacity: 0.7; transform: translateX(-0.045em); clip-path: inset(8% 0 68% 0); }
+        80% { opacity: 0.45; transform: translateX(0.035em); clip-path: inset(43% 0 36% 0); }
+        82% { opacity: 0.65; transform: translateX(-0.025em); clip-path: inset(72% 0 8% 0); }
+        84% { opacity: 0; transform: translateX(0); clip-path: inset(0 0 100% 0); }
+      }
+      @keyframes radar-spin { to { transform: rotate(360deg); } }
+      @keyframes ring-pulse {
+        0%, 100% { opacity: 0.35; transform: scale(0.92); }
+        50% { opacity: 0.8; transform: scale(1.03); }
+      }
+      @keyframes status-blink {
+        0%, 42%, 100% { opacity: 1; }
+        48%, 58% { opacity: 0.3; }
+      }
+
+      body {
+        background-color: var(--bg);
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 44px 44px;
+        font-family: "IBM Plex Sans", sans-serif;
+        animation: grid-drift 18s linear infinite;
+      }
+      body::before,
+      body::after { display: block; }
+      body::before {
+        inset: -25%;
+        background:
+          radial-gradient(circle at 14% 22%, var(--panel-glow), transparent 22%),
+          radial-gradient(circle at 82% 34%, color-mix(in srgb, var(--blue) 10%, transparent), transparent 27%),
+          radial-gradient(circle at 52% 90%, color-mix(in srgb, var(--cyan) 7%, transparent), transparent 24%);
+        filter: blur(12px);
+        animation: orbit-drift 16s ease-in-out infinite alternate;
+      }
+      body::after {
+        background: linear-gradient(180deg, transparent 0 48%, var(--grid-bright) 49%, transparent 50% 100%);
+        height: 18vh;
+        opacity: 0;
+        animation: watch-scan 9s linear infinite;
+      }
+      .ambient-tech {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .ambient-ring {
+        position: absolute;
+        width: min(48vw, 680px);
+        aspect-ratio: 1;
+        right: -16vw;
+        top: 10vh;
+        border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 70px color-mix(in srgb, var(--cyan) 2.8%, transparent),
+          0 0 0 142px color-mix(in srgb, var(--cyan) 1.8%, transparent);
+        animation: ring-pulse 7s ease-in-out infinite;
+      }
+      .nav-shell, main, footer { position: relative; z-index: 1; }
+      .nav-shell {
+        border-color: var(--line);
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(16px) saturate(135%);
+      }
+      .nav { width: min(1180px, calc(100% - 40px)); min-height: 60px; }
+      .nav-context {
+        color: var(--blue-strong);
+        letter-spacing: 0.09em;
+      }
+      .nav-context::before {
+        content: "";
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 9px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 13px var(--cyan);
+        animation: status-blink 3s steps(1) infinite;
+      }
+      .nav-links a { color: var(--muted); font-weight: 600; }
+      .nav-links a:hover, .nav-links a:focus-visible { color: var(--cyan); }
+      .container { width: min(1180px, calc(100% - 40px)); }
+      .hero {
+        min-height: min(810px, calc(100svh - 60px));
+        grid-template-columns: minmax(0, 1.25fr) minmax(330px, 0.75fr);
+        gap: clamp(48px, 7vw, 98px);
+        padding: clamp(82px, 11vw, 132px) 0 94px;
+      }
+      .identity {
+        margin-bottom: 27px;
+        color: var(--cyan);
+        letter-spacing: 0.08em;
+        animation: hero-lock 650ms cubic-bezier(.2,.75,.2,1) both;
+      }
+      .identity::before {
+        width: 42px;
+        height: 1px;
+        background: var(--cyan);
+        box-shadow: 10px -6px 0 -0.2px var(--cyan), 21px 6px 0 -0.2px var(--cyan);
+      }
+      h1 {
+        max-width: 790px;
+        color: var(--ink);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: clamp(3.45rem, 7vw, 6.6rem);
+        line-height: 0.91;
+        letter-spacing: -0.065em;
+        font-weight: 700;
+      }
+      .hero-line {
+        position: relative;
+        display: block;
+        width: fit-content;
+        color: inherit;
+        font-style: normal;
+        animation: title-acquire 980ms cubic-bezier(.16,.78,.22,1) both;
+      }
+      .hero-line::after {
+        content: attr(data-text);
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        color: var(--cyan);
+        opacity: 0;
+        pointer-events: none;
+        text-shadow: 0.05em 0 var(--signal);
+        animation: signal-echo 7.2s steps(1, end) 2.1s infinite;
+      }
+      .line-one { animation-delay: 60ms; }
+      .line-two { color: var(--blue); animation-delay: 190ms; }
+      .line-three { animation-delay: 320ms; }
+      .detection-word::before { display: none; }
+      .detection-word::after {
+        display: block;
+        inset: 0;
+        width: auto;
+        background: transparent;
+        box-shadow: none;
+        animation: signal-echo 7.2s steps(1, end) 2.2s infinite;
+      }
+      .hero-copy { animation: hero-lock 700ms ease-out 390ms both; }
+      .hero-actions { animation: hero-lock 700ms ease-out 480ms both; }
+      .button {
+        position: relative;
+        overflow: hidden;
+        border-color: var(--blue-strong);
+        color: #f1fbff;
+        background: var(--blue-strong);
+      }
+      .button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.24) 48%, transparent 66%);
+        transform: translateX(-130%);
+        transition: transform 520ms ease;
+      }
+      .button:hover::after, .button:focus-visible::after { transform: translateX(130%); }
+      .button.secondary { color: var(--blue-strong); background: transparent; border-color: var(--line-strong); }
+      @media (prefers-color-scheme: dark) {
+        .button { color: #031019; }
+        .button.secondary { color: var(--blue-strong); }
+      }
+
+      .radar-panel {
+        min-height: 430px;
+        padding: 30px;
+        border: 1px solid var(--line-strong);
+        background:
+          linear-gradient(145deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--surface-2) 82%, transparent));
+        box-shadow: var(--shadow), inset 0 0 38px var(--panel-glow);
+        clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 26px 100%, 0 calc(100% - 26px));
+      }
+      .radar-panel::before,
+      .radar-panel::after { display: block; border-color: var(--cyan); }
+      .radar-sweep {
+        display: block;
+        width: 360px;
+        height: auto;
+        aspect-ratio: 1;
+        right: -154px;
+        top: -136px;
+        border-radius: 50%;
+        opacity: 0.28;
+        background:
+          repeating-radial-gradient(circle, transparent 0 35px, color-mix(in srgb, var(--cyan) 30%, transparent) 36px 37px),
+          conic-gradient(from 8deg, transparent 0 74%, color-mix(in srgb, var(--cyan) 68%, transparent) 90%, transparent 91% 100%);
+        animation: radar-spin 8s linear infinite;
+      }
+      .radar-sweep::after { display: block; }
+      .radar-head { margin-bottom: 20px; }
+      .radar-head h2 { color: var(--blue-strong); }
+      .signal { color: var(--cyan); }
+      .signal::before { background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+      .focus-number { color: var(--cyan); }
+      .focus-list li { border-color: var(--line); }
+      .availability { border-top: 1px dashed var(--line-strong); }
+
+      .section { padding: clamp(86px, 10vw, 132px) 0; border-color: var(--line); }
+      .section-head { grid-template-columns: 150px minmax(0, 1fr); margin-bottom: 56px; }
+      .section-index { color: var(--cyan); letter-spacing: 0.05em; }
+      .section-title {
+        max-width: 800px;
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: clamp(2.45rem, 4.8vw, 4.55rem);
+        font-weight: 700;
+        line-height: 0.98;
+      }
+      .project-stack { gap: 12px; border: 0; }
+      .project {
+        grid-template-columns: 74px minmax(0, 1.2fr) minmax(220px, 0.8fr) 42px;
+        padding: 28px 26px 28px 14px;
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 92%, transparent);
+        box-shadow: inset 3px 0 0 transparent;
+        transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      }
+      .project:hover, .project:focus-visible {
+        border-color: var(--cyan);
+        background: var(--accent-soft);
+        box-shadow: inset 3px 0 0 var(--cyan), 0 14px 36px color-mix(in srgb, var(--blue) 10%, transparent);
+        transform: translateX(5px);
+      }
+      .project-rank { color: var(--cyan); font-size: 1.15rem; }
+      .tag {
+        border: 1px solid var(--line);
+        padding: 5px 8px;
+        margin: 0;
+        background: color-mix(in srgb, var(--surface) 72%, transparent);
+      }
+      .project-arrow { color: var(--cyan); }
+      .timeline::before { background: linear-gradient(var(--cyan), var(--line)); }
+      .role::before {
+        border-color: var(--cyan);
+        background: var(--bg);
+        border-radius: 0;
+        transform: rotate(45deg);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 30%, transparent);
+      }
+      .role-date, .skill-group span { color: var(--cyan); }
+      .side-sheet {
+        border: 1px solid var(--line-strong);
+        border-top: 3px solid var(--cyan);
+        background: color-mix(in srgb, var(--surface) 86%, transparent);
+        padding: 25px;
+        box-shadow: inset 0 0 28px var(--panel-glow);
+      }
+      .education-band {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        color: #effbf7;
+        background: #163630;
+        border: 0;
+        clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+      }
+      .education-entry {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 36px;
+      }
+      .education-entry + .education-entry {
+        margin-top: 34px;
+        padding-top: 34px;
+        border-top: 1px solid rgba(189, 219, 210, 0.28);
+      }
+      .education-band h3 {
+        margin: 12px 0 0;
+        max-width: 800px;
+        font-size: clamp(1.8rem, 4vw, 3.4rem);
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+      }
+      .education-band::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        aspect-ratio: 1;
+        right: -110px;
+        top: -140px;
+        border: 1px solid rgba(98, 221, 238, 0.34);
+        border-radius: 50%;
+        box-shadow: 0 0 0 40px rgba(98, 221, 238, 0.045), 0 0 0 80px rgba(98, 221, 238, 0.025);
+      }
+      .education-band .mono { color: #73ded1; }
+      .education-band p, .degree-meta span { color: #bddbd2; }
+      .degree-meta { position: relative; z-index: 1; }
+
+      .metrics-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin: 0 0 clamp(48px, 7vw, 84px);
+        border-top: 1px solid var(--line-strong);
+        border-bottom: 1px solid var(--line-strong);
+        background: color-mix(in srgb, var(--surface) 62%, transparent);
+        animation: hero-lock 700ms ease-out 560ms both;
+      }
+      .metric {
+        min-width: 0;
+        padding: 22px 24px 24px;
+        border-left: 1px solid var(--line);
+      }
+      .metric:first-child { border-left: 0; }
+      .metric-value {
+        display: block;
+        color: var(--signal);
+        font: 600 clamp(1.8rem, 3.2vw, 2.7rem)/1 "IBM Plex Mono", monospace;
+        letter-spacing: -0.06em;
+      }
+      .metric-label {
+        display: block;
+        margin-top: 9px;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      @media (max-width: 850px) {
+        .hero { grid-template-columns: 1fr; }
+        .radar-panel { max-width: 590px; }
+        .ambient-ring { width: 620px; right: -390px; }
+      }
+      @media (max-width: 620px) {
+        .nav { width: min(100% - 28px, 1180px); min-height: 56px; }
+        .container { width: min(100% - 28px, 1180px); }
+        .hero { padding: 68px 0 72px; }
+        h1 { font-size: clamp(3.2rem, 15.5vw, 4.65rem); line-height: 0.92; }
+        .section-head { grid-template-columns: 1fr; }
+        .project { grid-template-columns: 35px minmax(0, 1fr) 24px; padding: 23px 12px 23px 8px; }
+        .project:hover, .project:focus-visible { transform: none; }
+        .radar-panel { min-height: 0; padding: 23px 20px; }
+        .metrics-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .metric { padding: 19px 16px 21px; }
+        .metric:nth-child(odd) { border-left: 0; }
+        .metric:nth-child(n + 3) { border-top: 1px solid var(--line); }
+        .education-band { clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); }
+        .education-entry { grid-template-columns: 1fr; gap: 18px; }
+        .education-entry + .education-entry { margin-top: 28px; padding-top: 28px; }
+      }
+
+      /* Real-time defense visualization */
+      .radar-panel {
+        min-height: 0;
+        padding: 26px;
+      }
+      .radar-panel .radar-head { margin-bottom: 16px; }
+      .defense-viz {
+        position: relative;
+        height: 290px;
+        margin: 0 -8px 18px;
+        overflow: hidden;
+        border-top: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+        border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+        background:
+          linear-gradient(color-mix(in srgb, var(--cyan) 8%, transparent) 1px, transparent 1px),
+          linear-gradient(90deg, color-mix(in srgb, var(--cyan) 8%, transparent) 1px, transparent 1px),
+          radial-gradient(circle at center, color-mix(in srgb, var(--cyan) 10%, transparent), transparent 58%);
+        background-size: 28px 28px, 28px 28px, 100% 100%;
+        cursor: crosshair;
+        touch-action: pan-y;
+      }
+      .defense-viz::before,
+      .defense-viz::after {
+        content: "";
+        position: absolute;
+        z-index: 2;
+        width: 24px;
+        height: 24px;
+        pointer-events: none;
+      }
+      .defense-viz::before {
+        top: 10px;
+        left: 10px;
+        border-top: 1px solid var(--cyan);
+        border-left: 1px solid var(--cyan);
+      }
+      .defense-viz::after {
+        right: 10px;
+        bottom: 10px;
+        border-right: 1px solid var(--cyan);
+        border-bottom: 1px solid var(--cyan);
+      }
+      .defense-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .viz-label,
+      .core-readout {
+        position: absolute;
+        z-index: 3;
+        pointer-events: none;
+        color: var(--muted);
+        font-size: 0.58rem;
+        line-height: 1;
+        letter-spacing: 0.08em;
+      }
+      .viz-label-top { top: 14px; right: 14px; }
+      .viz-label-bottom { left: 14px; bottom: 14px; }
+      .core-readout {
+        right: 14px;
+        bottom: 14px;
+        color: var(--cyan);
+      }
+      .core-readout::before {
+        content: "";
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 8px var(--cyan);
+      }
+      .compact-focus {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+      }
+      .compact-focus li {
+        grid-template-columns: 21px minmax(0, 1fr);
+        gap: 8px;
+        padding: 12px 10px 12px 0;
+      }
+      .compact-focus li:nth-child(odd) { border-right: 1px solid var(--line); }
+      .compact-focus li:nth-child(even) { padding-left: 10px; }
+      .compact-focus li:nth-child(-n + 2) { border-top: 0; }
+      .compact-focus strong { font-size: 0.76rem; }
+      .compact-focus small { font-size: 0.64rem; line-height: 1.4; }
+
+      @media (max-width: 620px) {
+        .defense-viz { height: 280px; margin-inline: -4px; }
+        .compact-focus { grid-template-columns: 1fr; }
+        .compact-focus li:nth-child(odd) { border-right: 0; }
+        .compact-focus li:nth-child(even) { padding-left: 0; }
+        .compact-focus li:nth-child(2) { border-top: 1px solid var(--line); }
+      }
+
+      /* Hero lockup — the defense model sits directly beside the headline */
+      .hero {
+        display: block;
+        min-height: 0;
+        padding: clamp(76px, 9vw, 118px) 0 80px;
+      }
+      .hero-lead { width: 100%; }
+      .hero-title-stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(390px, 0.8fr);
+        gap: clamp(34px, 5vw, 68px);
+        align-items: center;
+      }
+      .hero-title-stage h1 {
+        max-width: 720px;
+        font-size: clamp(3.45rem, 6.55vw, 6.2rem);
+      }
+      .title-defense-viz {
+        height: clamp(350px, 33vw, 430px);
+        margin: 0;
+        border: 1px solid var(--line-strong);
+        background:
+          linear-gradient(color-mix(in srgb, var(--cyan) 9%, transparent) 1px, transparent 1px),
+          linear-gradient(90deg, color-mix(in srgb, var(--cyan) 9%, transparent) 1px, transparent 1px),
+          radial-gradient(circle at center, color-mix(in srgb, var(--cyan) 15%, transparent), transparent 61%),
+          color-mix(in srgb, var(--surface) 88%, transparent);
+        background-size: 28px 28px, 28px 28px, 100% 100%, 100% 100%;
+        box-shadow: var(--shadow), inset 0 0 44px var(--panel-glow);
+        clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
+      }
+      .title-defense-viz::before { top: 14px; left: 14px; }
+      .title-defense-viz::after { right: 14px; bottom: 14px; }
+      .hero-support {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.95fr);
+        gap: clamp(34px, 5vw, 68px);
+        align-items: start;
+        margin-top: 38px;
+      }
+      .hero-copy { margin-top: 0; }
+      .radar-panel {
+        min-height: 0;
+        margin: 0;
+        padding: 22px 24px 24px;
+      }
+      .radar-panel .radar-sweep { display: none; }
+
+      @media (max-width: 850px) {
+        .hero-title-stage,
+        .hero-support { grid-template-columns: 1fr; }
+        .hero-title-stage { gap: 38px; }
+        .title-defense-viz { width: min(100%, 590px); height: 360px; }
+        .hero-support { margin-top: 30px; }
+        .radar-panel { max-width: 590px; }
+      }
+      @media (max-width: 620px) {
+        .hero { padding: 64px 0 68px; }
+        .hero-title-stage h1 { font-size: clamp(3.2rem, 15.5vw, 4.65rem); }
+        .title-defense-viz {
+          height: 300px;
+          clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+        }
+        .hero-support { gap: 28px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ambient-tech" aria-hidden="true">
+      <span class="ambient-ring"></span>
+    </div>
+    <div class="nav-shell">
+      <nav class="nav" aria-label="Portfolio sections">
+        <span class="nav-context mono">CYBERSECURITY / DEFENSIVE ENGINEERING</span>
+        <div class="nav-links">
+          <a href="#projects">Projects</a>
+          <a href="#experience">Experience</a>
+          <a href="#education">Education</a>
+        </div>
+      </nav>
+    </div>
+
+    <main>
+      <div class="container">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-lead">
+            <div class="identity">Venkata Jaya Pavan Naru · Cybersecurity Professional</div>
+            <div class="hero-title-stage">
+              <h1 id="hero-title" aria-label="Turning telemetry into threat intelligence."><span class="hero-line line-one" data-text="Turning" aria-hidden="true">Turning</span><span class="hero-line line-two detection-word" data-text="telemetry into" aria-hidden="true">telemetry into</span><span class="hero-line line-three" data-text="threat intelligence." aria-hidden="true">threat intelligence.</span></h1>
+              <div class="defense-viz title-defense-viz" role="img" tabindex="0" aria-label="Real-time rotating wireframe shield protecting a core inside an interactive threat-particle network. Move the pointer over the scene to steer it.">
+                <canvas class="defense-canvas" aria-hidden="true"></canvas>
+                <span class="viz-label viz-label-top mono">THREAT FIELD</span>
+                <span class="viz-label viz-label-bottom mono">MOVE TO STEER</span>
+                <span class="core-readout mono">CORE / DEFENDED</span>
+              </div>
+            </div>
+
+            <div class="hero-support">
+              <div class="hero-copy-block">
+                <p class="hero-copy">
+                  Cybersecurity professional with <strong>four years of experience</strong> across detection engineering, threat hunting, vulnerability management, cloud security, endpoint defense, and incident response.
+                </p>
+                <div class="hero-actions">
+                  <a class="button" href="#projects">
+                    Inspect the projects
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+                  </a>
+                  <a class="button secondary" href="#experience">View experience</a>
+                </div>
+              </div>
+
+              <aside class="radar-panel" aria-label="Security focus areas">
+                <div class="radar-head">
+                  <h2 class="mono">DEFENSIVE RANGE</h2>
+                  <span class="signal">ACTIVE</span>
+                </div>
+                <ol class="focus-list compact-focus">
+                  <li><span class="focus-number">01</span><div><strong>Detection engineering</strong><small>Sigma · SPL · KQL · MITRE ATT&amp;CK</small></div></li>
+                  <li><span class="focus-number">02</span><div><strong>Threat prioritization</strong><small>CISA KEV · EPSS · vulnerability context</small></div></li>
+                  <li><span class="focus-number">03</span><div><strong>Cloud &amp; identity</strong><small>Azure · AWS · Entra ID · posture checks</small></div></li>
+                  <li><span class="focus-number">04</span><div><strong>SOC investigation</strong><small>SIEM · EDR · email security · response</small></div></li>
+                </ol>
+                <div class="availability"><b>Open to opportunities across the U.S.</b><br />Remote, hybrid, or onsite · open to relocation</div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="metrics-strip" aria-label="Portfolio metrics">
+          <div class="metric"><span class="metric-value">4+</span><span class="metric-label">years in cybersecurity</span></div>
+          <div class="metric"><span class="metric-value">4</span><span class="metric-label">public security projects</span></div>
+          <div class="metric"><span class="metric-value">8</span><span class="metric-label">Sigma detection rules</span></div>
+          <div class="metric"><span class="metric-value">11</span><span class="metric-label">CIS-mapped cloud checks</span></div>
+        </section>
+      </div>
+
+      <section class="section" id="projects" aria-labelledby="projects-title">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-index">01 / PROJECTS</span>
+            <div>
+              <h2 class="section-title" id="projects-title">Security work you can inspect.</h2>
+              <p class="section-intro">Four practical builds spanning detection, vulnerability prioritization, cloud posture, and phishing response—focused on measurable security outcomes.</p>
+            </div>
+          </div>
+
+          <div class="project-stack">
+            <a class="project" href="https://github.com/jp2048/threat-informed-vuln-prioritization" target="_blank" rel="noopener noreferrer" aria-label="Open threat-informed vulnerability prioritization on GitHub">
+              <div class="project-rank">01</div>
+              <div class="project-main"><h3>Threat-informed vulnerability prioritization</h3><p>Enriches scanner findings with CISA KEV and EPSS, then assigns P1–P4 remediation tiers with a written rationale for every decision.</p></div>
+              <div class="project-meta"><span class="tag">CISA KEV</span><span class="tag">EPSS</span><span class="tag">PYTHON</span></div>
+              <div class="project-arrow" aria-hidden="true">↗</div>
+            </a>
+
+            <a class="project" href="https://github.com/jp2048/detection-as-code" target="_blank" rel="noopener noreferrer" aria-label="Open detection as code on GitHub">
+              <div class="project-rank">02</div>
+              <div class="project-main"><h3>Detection as code</h3><p>Eight Sigma rules across Windows, Linux, and cloud, mapped to MITRE ATT&amp;CK with automated validation and Atomic Red Team testing notes.</p></div>
+              <div class="project-meta"><span class="tag">SIGMA</span><span class="tag">MITRE ATT&amp;CK</span><span class="tag">CI VALIDATION</span></div>
+              <div class="project-arrow" aria-hidden="true">↗</div>
+            </a>
+
+            <a class="project" href="https://github.com/jp2048/cloud-posture-checker" target="_blank" rel="noopener noreferrer" aria-label="Open cloud posture checker on GitHub">
+              <div class="project-rank">03</div>
+              <div class="project-main"><h3>Cloud posture checker</h3><p>Eleven CIS-mapped checks across Azure and AWS, with real SDK code paths and a credential-free demo mode for repeatable review.</p></div>
+              <div class="project-meta"><span class="tag">AZURE</span><span class="tag">AWS</span><span class="tag">CIS</span></div>
+              <div class="project-arrow" aria-hidden="true">↗</div>
+            </a>
+
+            <a class="project" href="https://github.com/jp2048/-Phishing-triage-automation" target="_blank" rel="noopener noreferrer" aria-label="Open phishing triage automation on GitHub">
+              <div class="project-rank">04</div>
+              <div class="project-main"><h3>Phishing triage automation</h3><p>Enriches URLs and hashes through VirusTotal and urlscan.io, applies a transparent risk score, and returns clear SOC action recommendations.</p></div>
+              <div class="project-meta"><span class="tag">VIRUSTOTAL</span><span class="tag">URLSCAN.IO</span><span class="tag">TRIAGE</span></div>
+              <div class="project-arrow" aria-hidden="true">↗</div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="experience" aria-labelledby="experience-title">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-index">02 / EXPERIENCE</span>
+            <div>
+              <h2 class="section-title" id="experience-title">Operations, engineering, and teaching.</h2>
+              <p class="section-intro">A foundation built across hands-on security work, volunteer engineering, and graduate-level networking and security instruction.</p>
+            </div>
+          </div>
+
+          <div class="experience-layout">
+            <div class="timeline">
+              <article class="role">
+                <div class="role-top"><h3>Associate Cybersecurity Analyst</h3><span class="role-date">JUL 2024 — PRESENT</span></div>
+                <p class="role-company">Steve Infotech LLC · United States</p>
+                <p>Cybersecurity operations work spanning SIEM, EDR, vulnerability, identity, email security, and incident workflows.</p>
+              </article>
+
+              <article class="role">
+                <div class="role-top"><h3>Network &amp; Cybersecurity Engineer</h3><span class="role-date">AUG 2024 — JAN 2025</span></div>
+                <p class="role-company">One Community Global · Volunteer</p>
+                <p>Contributed network and cybersecurity engineering support to a nonprofit initiative alongside a full-time security role.</p>
+              </article>
+
+              <article class="role">
+                <div class="role-top"><h3>Graduate Teaching Assistant</h3><span class="role-date">SEP 2023 — MAY 2024</span></div>
+                <p class="role-company">New Jersey Institute of Technology</p>
+                <p>Supported CS656 Internet and Higher Layer Protocols (Sep–Dec 2023) and CS645 Security and Higher Layer Protocols (Sep 2023–May 2024).</p>
+              </article>
+
+              <article class="role">
+                <div class="role-top"><h3>Security Analyst</h3><span class="role-date">JUN 2020 — JUL 2022</span></div>
+                <p class="role-company">OSS Technologies · India</p>
+                <p>Developed an early-career foundation in security monitoring, investigation, vulnerability, and endpoint defense workflows.</p>
+              </article>
+            </div>
+
+            <aside class="side-sheet" aria-label="Core security capabilities">
+              <h3 class="mono">OPERATIONAL TOOLKIT</h3>
+              <div class="skill-group"><span>SIEM &amp; QUERY</span><p>Splunk ES · Microsoft Sentinel · IBM QRadar · KQL · SPL</p></div>
+              <div class="skill-group"><span>ENDPOINT &amp; RESPONSE</span><p>CrowdStrike Falcon · Palo Alto Cortex XDR · Microsoft Defender</p></div>
+              <div class="skill-group"><span>VULNERABILITY</span><p>Qualys · Nessus · threat-informed prioritization</p></div>
+              <div class="skill-group"><span>IDENTITY &amp; EMAIL</span><p>Entra ID · Proofpoint · Defender suite</p></div>
+              <div class="skill-group"><span>AUTOMATION &amp; FRAMEWORKS</span><p>Python · PowerShell · ServiceNow · NIST CSF · CIS Controls</p></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="education" aria-labelledby="education-title">
+        <div class="container">
+          <div class="education-band">
+            <div class="education-entry">
+              <div>
+                <span class="mono">NEW JERSEY INSTITUTE OF TECHNOLOGY</span>
+                <h2 id="education-title">M.S. in Cybersecurity &amp; Privacy</h2>
+                <p>Completed May 2024 · Newark, New Jersey</p>
+              </div>
+              <div class="degree-meta"><strong>3.7</strong><span>GPA</span></div>
+            </div>
+            <div class="education-entry">
+              <div>
+                <span class="mono">VIT UNIVERSITY</span>
+                <h3>Bachelor’s in Computer Science</h3>
+                <p>Completed July 2021 · Vellore, Tamil Nadu, India</p>
+              </div>
+              <div class="degree-meta"><strong>2021</strong><span>Completed July</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <span>Built around practical defensive security work.</span>
+        <a href="https://github.com/jp2048/threat-informed-vuln-prioritization" target="_blank" rel="noopener noreferrer">Start with the flagship project ↗</a>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var canvas = document.querySelector(".defense-canvas");
+        var field = document.querySelector(".defense-viz");
+        if (!canvas || !field || !canvas.getContext) return;
+
+        var ctx = canvas.getContext("2d");
+        var motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        var darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        var width = 0;
+        var height = 0;
+        var dpr = 1;
+        var frame = 0;
+        var visible = true;
+        var pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+        var shield = [
+          [-0.92, 0.72],
+          [0, 1.18],
+          [0.92, 0.72],
+          [0.76, -0.52],
+          [0, -1.34],
+          [-0.76, -0.52]
+        ];
+
+        var nodes = [];
+        for (var i = 0; i < 30; i += 1) {
+          var u = (i + 0.5) / 30;
+          var phi = Math.acos(1 - 2 * u);
+          var theta = i * 2.399963229728653;
+          nodes.push({
+            theta: theta,
+            phi: phi,
+            radius: 1.7 + (i % 5) * 0.12,
+            speed: 0.055 + (i % 7) * 0.008,
+            size: 1.1 + (i % 4) * 0.42,
+            threat: i % 9 === 0
+          });
+        }
+
+        function color(hex, alpha) {
+          var raw = hex.replace("#", "");
+          var num = parseInt(raw.length === 3 ? raw.split("").map(function (c) { return c + c; }).join("") : raw, 16);
+          return "rgba(" + ((num >> 16) & 255) + "," + ((num >> 8) & 255) + "," + (num & 255) + "," + alpha + ")";
+        }
+
+        function palette() {
+          return darkQuery.matches
+            ? { cyan: "#53d8d0", green: "#52c9ad", signal: "#f0a05b", ink: "#edf8f4" }
+            : { cyan: "#079c97", green: "#147765", signal: "#c96f2b", ink: "#10201f" };
+        }
+
+        function rotate(point, rx, ry, rz) {
+          var x = point[0];
+          var y = point[1];
+          var z = point[2];
+          var cx = Math.cos(rx); var sx = Math.sin(rx);
+          var cy = Math.cos(ry); var sy = Math.sin(ry);
+          var cz = Math.cos(rz); var sz = Math.sin(rz);
+          var y1 = y * cx - z * sx;
+          var z1 = y * sx + z * cx;
+          var x2 = x * cy + z1 * sy;
+          var z2 = -x * sy + z1 * cy;
+          return [x2 * cz - y1 * sz, x2 * sz + y1 * cz, z2];
+        }
+
+        function project(point, scale) {
+          var depth = 4.8 + point[2];
+          var perspective = 4.8 / depth;
+          return {
+            x: width * 0.5 + point[0] * scale * perspective,
+            y: height * 0.5 - point[1] * scale * perspective,
+            z: point[2],
+            p: perspective
+          };
+        }
+
+        function resize() {
+          var rect = field.getBoundingClientRect();
+          width = Math.max(1, rect.width);
+          height = Math.max(1, rect.height);
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(width * dpr);
+          canvas.height = Math.round(height * dpr);
+          canvas.style.width = width + "px";
+          canvas.style.height = height + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          draw(performance.now());
+        }
+
+        function drawLine(a, b, stroke, lineWidth) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = lineWidth;
+          ctx.stroke();
+        }
+
+        function draw(timestamp) {
+          var colors = palette();
+          var time = motionQuery.matches ? 2.4 : timestamp * 0.001;
+          var scale = Math.min(width, height) * 0.25;
+          var yaw = time * 0.32 + pointer.x * 0.62;
+          var pitch = -0.13 + pointer.y * 0.3;
+          var roll = Math.sin(time * 0.24) * 0.045;
+
+          ctx.clearRect(0, 0, width, height);
+          pointer.x += (pointer.targetX - pointer.x) * 0.055;
+          pointer.y += (pointer.targetY - pointer.y) * 0.055;
+
+          var projectedNodes = nodes.map(function (node, index) {
+            var drift = time * node.speed;
+            var x = Math.sin(node.phi) * Math.cos(node.theta + drift) * node.radius;
+            var y = Math.cos(node.phi) * node.radius;
+            var z = Math.sin(node.phi) * Math.sin(node.theta + drift) * node.radius;
+            var rotated = rotate([x, y, z], pitch * 0.35, yaw * 0.18, roll);
+            var point = project(rotated, scale);
+            point.index = index;
+            point.threat = node.threat;
+            point.size = node.size;
+            point.world = rotated;
+            return point;
+          });
+
+          for (var a = 0; a < projectedNodes.length; a += 1) {
+            for (var b = a + 1; b < Math.min(projectedNodes.length, a + 6); b += 1) {
+              var pa = projectedNodes[a];
+              var pb = projectedNodes[b];
+              var dx = pa.world[0] - pb.world[0];
+              var dy = pa.world[1] - pb.world[1];
+              var dz = pa.world[2] - pb.world[2];
+              var distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+              if (distance < 1.55) {
+                var linkAlpha = (1 - distance / 1.55) * 0.42;
+                drawLine(pa, pb, color(colors.cyan, linkAlpha), 0.7);
+              }
+            }
+          }
+
+          projectedNodes.sort(function (left, right) { return right.z - left.z; });
+          projectedNodes.forEach(function (node) {
+            var nodeColor = node.threat ? colors.signal : colors.cyan;
+            var pulse = node.threat ? 1 + Math.sin(time * 3.2 + node.index) * 0.35 : 1;
+            if (node.threat) {
+              drawLine(node, { x: width * 0.5, y: height * 0.5 }, color(colors.signal, 0.14), 0.8);
+            }
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.size * node.p * pulse, 0, Math.PI * 2);
+            ctx.fillStyle = color(nodeColor, node.threat ? 0.95 : 0.62);
+            ctx.fill();
+            if (node.threat) {
+              ctx.beginPath();
+              ctx.arc(node.x, node.y, 5.5 * node.p * pulse, 0, Math.PI * 2);
+              ctx.strokeStyle = color(nodeColor, 0.28);
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          });
+
+          var front = shield.map(function (point) { return project(rotate([point[0], point[1], 0.28], pitch, yaw, roll), scale); });
+          var back = shield.map(function (point) { return project(rotate([point[0], point[1], -0.28], pitch, yaw, roll), scale); });
+          var centerFront = project(rotate([0, -0.08, 0.28], pitch, yaw, roll), scale);
+          var centerBack = project(rotate([0, -0.08, -0.28], pitch, yaw, roll), scale);
+
+          ctx.save();
+          ctx.shadowColor = color(colors.cyan, 0.7);
+          ctx.shadowBlur = 13;
+          [back, front].forEach(function (loop, loopIndex) {
+            ctx.beginPath();
+            loop.forEach(function (point, index) {
+              if (index === 0) ctx.moveTo(point.x, point.y);
+              else ctx.lineTo(point.x, point.y);
+            });
+            ctx.closePath();
+            ctx.strokeStyle = color(loopIndex ? colors.cyan : colors.green, loopIndex ? 0.92 : 0.42);
+            ctx.lineWidth = loopIndex ? 1.65 : 1;
+            ctx.stroke();
+          });
+          ctx.restore();
+
+          for (var edge = 0; edge < shield.length; edge += 1) {
+            drawLine(front[edge], back[edge], color(colors.cyan, 0.34), 0.8);
+            drawLine(centerFront, front[edge], color(colors.cyan, 0.24), 0.75);
+            drawLine(centerBack, back[edge], color(colors.green, 0.15), 0.65);
+          }
+          drawLine(centerFront, centerBack, color(colors.cyan, 0.48), 1);
+
+          var core = project(rotate([0, -0.08, 0], pitch, yaw, roll), scale);
+          var corePulse = motionQuery.matches ? 1 : 1 + Math.sin(time * 2.6) * 0.08;
+          var glow = ctx.createRadialGradient(core.x, core.y, 0, core.x, core.y, 31 * corePulse);
+          glow.addColorStop(0, color(colors.ink, 0.98));
+          glow.addColorStop(0.18, color(colors.cyan, 0.95));
+          glow.addColorStop(0.44, color(colors.cyan, 0.22));
+          glow.addColorStop(1, color(colors.cyan, 0));
+          ctx.beginPath();
+          ctx.arc(core.x, core.y, 31 * corePulse, 0, Math.PI * 2);
+          ctx.fillStyle = glow;
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(core.x, core.y, 11 * corePulse, 0, Math.PI * 2);
+          ctx.strokeStyle = color(colors.ink, 0.84);
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          if (!motionQuery.matches && visible) frame = requestAnimationFrame(draw);
+        }
+
+        function start() {
+          cancelAnimationFrame(frame);
+          frame = 0;
+          if (!motionQuery.matches && visible) frame = requestAnimationFrame(draw);
+          else draw(performance.now());
+        }
+
+        field.addEventListener("pointermove", function (event) {
+          var rect = field.getBoundingClientRect();
+          pointer.targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+          pointer.targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+          if (motionQuery.matches) draw(performance.now());
+        }, { passive: true });
+        field.addEventListener("pointerleave", function () {
+          pointer.targetX = 0;
+          pointer.targetY = 0;
+        });
+
+        if ("ResizeObserver" in window) new ResizeObserver(resize).observe(field);
+        else window.addEventListener("resize", resize);
+
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver(function (entries) {
+            visible = entries[0].isIntersecting;
+            start();
+          }, { threshold: 0.05 }).observe(field);
+        }
+
+        if (motionQuery.addEventListener) motionQuery.addEventListener("change", start);
+        if (darkQuery.addEventListener) darkQuery.addEventListener("change", function () { draw(performance.now()); });
+        resize();
+        start();
+      }());
+    </script>
+  </body>
+</html>
